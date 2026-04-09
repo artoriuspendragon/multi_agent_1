@@ -1,0 +1,102 @@
+# 私人消息流推送助手 - 配置示例（请复制为 config.yaml 并填入环境变量）
+# 敏感项使用占位符 ${VAR}，由环境变量注入，勿提交真实密钥
+
+sources:
+  - id: rss-tech
+    type: rss
+    url: https://example.com/feed.xml
+    name: "某科技博客"
+  - id: arxiv-cs-ai
+    type: api
+    endpoint: https://export.arxiv.org/api/query
+    response_format: feed
+    comment_mode: with_comment
+    comment_tier_filter_enabled: true
+    comment_tier_match_mode: any
+    comment_tier_keywords:
+      - "ICLR 2026 Oral Presentation"
+      - "ICASSP 2026 Oral"
+      - "ACL 2026 Main"
+      - "CVPR 2026 - main"
+      - "AISTATS 2026"
+      - "NeurIPS 2026"
+      - "ICML 2026"
+      - "AAAI 2026"
+      - "IJCAI 2026"
+      - "KDD 2026"
+      - "WWW 2026"
+      - "SIGIR 2026"
+      - "EMNLP 2026"
+      - "NAACL 2026"
+      - "ICCV 2026"
+      - "ECCV 2026"
+    github_filter_enabled: true
+    github_require_repo: true
+    github_stars_min: 0
+    github_token: "${GITHUB_TOKEN}"
+    github_timeout_seconds: 10
+    quality_score_enabled: true
+    quality_score_min: 4.5
+    quality_score_top_k: 120
+    quality_weight_comment: 0.35
+    quality_weight_venue: 0.25
+    quality_weight_github: 0.25
+    quality_weight_crossref: 0.15
+    crossref_enabled: true
+    openalex_enabled: true
+    semantic_scholar_enabled: true
+    semantic_scholar_api_key: "${SEMANTIC_SCHOLAR_API_KEY}"
+    crossref_timeout_seconds: 8
+    name: "arXiv cs.AI"
+    params:
+      search_query: "(cat:cs.AI OR cat:cs.LG) AND submittedDate:[{{yesterday:%Y%m%d}}0000 TO {{today:%Y%m%d}}0000]"
+      start: "0"
+      max_results: "200"
+      sortBy: "submittedDate"
+      sortOrder: "descending"
+  - id: api-news
+    type: api
+    endpoint: https://api.example.com/news
+    headers:
+      "X-API-Key": "${NEWS_API_KEY}"
+
+filter:
+  strategy: rule   # rule | agent | rule_then_agent
+  exclude_keywords: ["广告"]
+  max_age_hours: 24
+  sort_by: published_at
+  order: desc
+  # strategy 含 agent 时取消注释并配置：
+  # agent:
+  #   endpoint: "https://api.minimaxi.com/v1/text/chatcompletion_v2"
+  #   api_key: "${FILTER_AGENT_API_KEY}"
+  #   model: "MiniMax-M2.7"
+  #   user_preference: "我关注 AI、创业、产品；不关心娱乐八卦、营销软文"
+  #   timeout_seconds: 60
+  #   max_items_per_call: 100
+
+digest:
+  strategy: agent   # template | agent | template_then_agent
+  title_template: "每日早报 {{date}}"
+  max_items: 50
+  group_by: source
+  agent:
+    endpoint: "https://api.minimaxi.com/v1/text/chatcompletion_v2"
+    api_key: "${DIGEST_AGENT_API_KEY}"
+    model: "MiniMax-M2.7"
+    constraints: "按报纸版面输出：头条<=5，其它版面每类5-10条；优先级 AI/Java > 国际 > 游戏 > 其他；做语义去重；可选八卦版面；输出完整 HTML"
+    output_format: rendered
+    timeout_seconds: 120
+    max_input_items: 120
+    include_summary: false
+    max_summary_chars: 200
+
+push:
+  channels:
+    - type: msgraph
+      enabled: true
+      graph_client_id: "${MS_CLIENT_ID}"    # Azure app registration 的 Application (client) ID
+      to: "me@outlook.com"                  # 首次运行会提示浏览器登录授权
+    - type: bark
+      enabled: true
+      key: "${BARK_KEY}"

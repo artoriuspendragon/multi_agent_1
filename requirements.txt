@@ -1,0 +1,8 @@
+# 私人消息流推送助手 - 依赖（models + config 模块所需）
+pydantic>=2.0,<3
+pyyaml>=6.0
+feedparser
+httpx
+requests
+beautifulsoup4
+# MiniMax agent (HTTP 调用用 httpx，当前不需额外 SDK)
