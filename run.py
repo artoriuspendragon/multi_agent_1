@@ -43,6 +43,24 @@ def _build_parser() -> argparse.ArgumentParser:
     return p
 
 
+def _load_dotenv(path: str) -> None:
+    """从 .env 文件加载环境变量（不覆盖已有变量）。"""
+    if not os.path.isfile(path):
+        return
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip()
+            if key and key not in os.environ:
+                os.environ[key] = value
+
+
 def main() -> int:
     parser = _build_parser()
     args = parser.parse_args()
@@ -58,6 +76,9 @@ def main() -> int:
     src_path = os.path.join(root, "src")
     if src_path not in sys.path:
         sys.path.insert(0, src_path)
+
+    # 自动加载 .env 文件中的环境变量
+    _load_dotenv(os.path.join(root, ".env"))
 
     try:
         from app import load_config, run

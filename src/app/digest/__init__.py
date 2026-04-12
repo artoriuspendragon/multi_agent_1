@@ -7,11 +7,15 @@
 
 from __future__ import annotations
 
+import logging
+
 from app.config import DigestConfig
 from app.models import Digest, RawItem
 
 from .agent import generate_with_agent
 from .template import generate_digest_template
+
+logger = logging.getLogger(__name__)
 
 
 def generate_digest(
@@ -34,7 +38,8 @@ def generate_digest(
                 weather_summary=weather_summary,
                 user_schedule=user_schedule,
             )
-        except Exception:
+        except Exception as e:
+            logger.error("digest agent failed, falling back to template: %s", e, exc_info=True)
             return generate_digest_template(items, digest_config)
 
     if strategy == "template_then_agent":
@@ -45,7 +50,8 @@ def generate_digest(
                 weather_summary=weather_summary,
                 user_schedule=user_schedule,
             )
-        except Exception:
+        except Exception as e:
+            logger.error("digest agent failed, falling back to template draft: %s", e, exc_info=True)
             return draft
 
     raise ValueError(f"unknown digest strategy: {strategy}")
