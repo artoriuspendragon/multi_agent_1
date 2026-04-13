@@ -200,6 +200,7 @@ class ChannelConfig(BaseModel):
     smtp_password: Optional[str] = None
     to: Optional[str] = None
     use_tls: bool = True
+    use_ssl: bool = False  # True 时用 SMTP_SSL（465端口），False 时用 STARTTLS（587端口）
     # bark
     base_url: str = "https://api.day.app"
     key: Optional[str] = None

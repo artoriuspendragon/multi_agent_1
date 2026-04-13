@@ -60,11 +60,21 @@ class EmailSender:
             msg["From"] = from_addr
             msg["To"] = to_addr
 
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as smtp:
-            smtp.ehlo()
-            if use_tls:
-                smtp.starttls()
+        use_ssl = channel.use_ssl
+        if use_ssl:
+            # 465 端口：直接 SSL 连接
+            with smtplib.SMTP_SSL(smtp_host, smtp_port or 465, timeout=30) as smtp:
                 smtp.ehlo()
-            if smtp_user and smtp_password:
-                smtp.login(smtp_user, smtp_password)
-            smtp.sendmail(from_addr, [to_addr], msg.as_string())
+                if smtp_user and smtp_password:
+                    smtp.login(smtp_user, smtp_password)
+                smtp.sendmail(from_addr, [to_addr], msg.as_string())
+        else:
+            # 587 端口：STARTTLS 升级
+            with smtplib.SMTP(smtp_host, smtp_port or 587, timeout=30) as smtp:
+                smtp.ehlo()
+                if use_tls:
+                    smtp.starttls()
+                    smtp.ehlo()
+                if smtp_user and smtp_password:
+                    smtp.login(smtp_user, smtp_password)
+                smtp.sendmail(from_addr, [to_addr], msg.as_string())

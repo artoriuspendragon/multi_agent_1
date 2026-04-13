@@ -9,6 +9,10 @@ import logging
 import time
 from typing import Any
 
+_RETRYABLE_STATUS_CODES = {1000, 1001, 1002, 1013}  # MiniMax 已知的可重试错误码
+_MAX_RETRIES = 3
+_RETRY_DELAY_SECONDS = 5
+
 import httpx
 
 logger = logging.getLogger(__name__)
@@ -67,38 +71,62 @@ def call_minimax_chat(
         json.dumps(request_log, ensure_ascii=False),
     )
 
-    start = time.perf_counter()
+    last_error: Exception | None = None
     with httpx.Client(timeout=httpx.Timeout(timeout_seconds)) as client:
-        resp = client.post(url, headers=headers, json=payload)
-        elapsed_ms = int((time.perf_counter() - start) * 1000)
-        response_log = {
-            "status_code": resp.status_code,
-            "elapsed_ms": elapsed_ms,
-            "headers": dict(resp.headers),
-            "body": resp.text,
-        }
-        logger.info(
-            "minimax response detail=%s",
-            json.dumps(response_log, ensure_ascii=False),
-        )
-        resp.raise_for_status()
-        try:
-            data = resp.json()
-        except Exception as e:
-            logger.exception("minimax response is not valid json")
-            raise ValueError(f"minimax response json decode failed: {e}") from e
+        for attempt in range(1, _MAX_RETRIES + 1):
+            start = time.perf_counter()
+            resp = client.post(url, headers=headers, json=payload)
+            elapsed_ms = int((time.perf_counter() - start) * 1000)
+            response_log = {
+                "status_code": resp.status_code,
+                "elapsed_ms": elapsed_ms,
+                "headers": dict(resp.headers),
+                "body": resp.text,
+            }
+            logger.info(
+                "minimax response detail=%s",
+                json.dumps(response_log, ensure_ascii=False),
+            )
+            resp.raise_for_status()
+            try:
+                data = resp.json()
+            except Exception as e:
+                logger.exception("minimax response is not valid json")
+                raise ValueError(f"minimax response json decode failed: {e}") from e
 
-    try:
-        content = str(data["choices"][0]["message"]["content"]).strip()
-        logger.info(
-            "minimax parsed content length=%d content=%s",
-            len(content),
-            content,
-        )
-        return content
-    except Exception as e:
-        logger.exception("invalid minimax response schema")
-        raise ValueError(f"invalid minimax response schema: {data}") from e
+            # 检查 MiniMax 业务层错误码
+            base_resp = data.get("base_resp") or {}
+            mm_status = base_resp.get("status_code", 0)
+            mm_msg = base_resp.get("status_msg", "")
+            if mm_status in _RETRYABLE_STATUS_CODES or data.get("choices") is None:
+                last_error = ValueError(f"invalid minimax response schema: {data}")
+                if attempt < _MAX_RETRIES:
+                    logger.warning(
+                        "minimax transient error (attempt %d/%d) status_code=%s msg=%s, retrying in %ds...",
+                        attempt, _MAX_RETRIES, mm_status, mm_msg, _RETRY_DELAY_SECONDS,
+                    )
+                    time.sleep(_RETRY_DELAY_SECONDS)
+                    continue
+                else:
+                    logger.error(
+                        "minimax failed after %d attempts, last error: status_code=%s msg=%s",
+                        _MAX_RETRIES, mm_status, mm_msg,
+                    )
+                    raise last_error
+
+            try:
+                content = str(data["choices"][0]["message"]["content"]).strip()
+                logger.info(
+                    "minimax parsed content length=%d content=%s",
+                    len(content),
+                    content,
+                )
+                return content
+            except Exception as e:
+                logger.exception("invalid minimax response schema")
+                raise ValueError(f"invalid minimax response schema: {data}") from e
+
+    raise last_error or ValueError("minimax: no response after retries")
 
 
 def extract_json_object(text: str) -> dict[str, Any]:
