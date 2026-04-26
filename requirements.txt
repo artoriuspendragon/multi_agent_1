@@ -6,3 +6,4 @@ httpx
 requests
 beautifulsoup4
 # MiniMax agent (HTTP 调用用 httpx，当前不需额外 SDK)
+json-repair>=0.30.0   # 修复 AI 返回的畸形/截断 JSON

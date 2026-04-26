@@ -132,8 +132,10 @@ def call_minimax_chat(
 def extract_json_object(text: str) -> dict[str, Any]:
     """
     从文本中提取 JSON object（兼容 ```json ... ``` 包裹）。
+    先尝试标准解析，失败时用 json-repair 修复畸形/截断的 JSON。
     """
     s = text.strip()
+    # 去掉 markdown 代码块包裹
     if s.startswith("```"):
         s = s.strip("`")
         if s.startswith("json"):
@@ -143,7 +145,32 @@ def extract_json_object(text: str) -> dict[str, Any]:
     end = s.rfind("}")
     if start < 0 or end < 0 or end <= start:
         raise ValueError("no json object found in text")
-    obj = json.loads(s[start : end + 1])
-    if not isinstance(obj, dict):
-        raise ValueError("json root must be object")
-    return obj
+
+    raw = s[start : end + 1]
+
+    # 第一步：标准解析
+    try:
+        obj = json.loads(raw)
+        if not isinstance(obj, dict):
+            raise ValueError("json root must be object")
+        return obj
+    except json.JSONDecodeError as e:
+        logger.warning("json parse failed (%s), trying json-repair...", e)
+
+    # 第二步：json-repair 修复
+    try:
+        from json_repair import repair_json
+        repaired = repair_json(raw, return_objects=True)
+        if isinstance(repaired, dict):
+            logger.info("json-repair succeeded")
+            return repaired
+        # repair_json 返回字符串时再 loads 一次
+        if isinstance(repaired, str):
+            obj = json.loads(repaired)
+            if isinstance(obj, dict):
+                logger.info("json-repair succeeded (string path)")
+                return obj
+    except Exception as repair_err:
+        logger.warning("json-repair also failed: %s", repair_err)
+
+    raise ValueError(f"failed to parse json from text (len={len(raw)})")
