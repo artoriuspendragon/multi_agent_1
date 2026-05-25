@@ -326,8 +326,11 @@ def generate_with_agent(
                     extra={},
                 )
             )
-        if s_items:
-            sections.append(Section(name=s_name, items=s_items))
+        # 文字版面（如天气）：用 text 字段，没有 items 也保留
+        s_text = s.get("text")
+        s_text = str(s_text).strip() if isinstance(s_text, str) and s_text.strip() else None
+        if s_items or s_text:
+            sections.append(Section(name=s_name, items=s_items, text=s_text))
 
     # 解析 rendered
     rendered_data = data.get("rendered") if isinstance(data.get("rendered"), dict) else {}

@@ -191,7 +191,7 @@ class ChannelConfig(BaseModel):
     type 决定所需字段：email(smtp_*, to)、bark(base_url, key)、telegram(bot token, chat_id) 等。
     """
 
-    type: Literal["email", "bark", "telegram", "wecom", "dingtalk", "msgraph"]
+    type: Literal["email", "bark", "telegram", "wecom", "dingtalk", "msgraph", "webpaper"]
     enabled: bool = True
     # email
     smtp_host: Optional[str] = None
@@ -214,6 +214,11 @@ class ChannelConfig(BaseModel):
     graph_client_id: Optional[str] = None
     graph_client_secret: Optional[str] = None
     graph_sender: Optional[str] = None
+    # webpaper（拟物报纸网页，发布到 GitHub Pages 的 docs/ 目录）
+    output_dir: str = "docs"
+    git_publish: bool = False  # True 时自动 git add/commit/push 站点目录
+    git_branch: Optional[str] = None  # 为空则推送到当前分支
+    masthead_en: str = "THE DAILY DISPATCH"
 
     @model_validator(mode="after")
     def require_fields_by_type(self) -> "ChannelConfig":

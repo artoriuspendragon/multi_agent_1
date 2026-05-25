@@ -100,3 +100,10 @@ push:
     - type: bark
       enabled: true
       key: "${BARK_KEY}"
+    # 拟物报纸网页（broadsheet）：渲染到 output_dir 并发布到 GitHub Pages
+    - type: webpaper
+      enabled: true
+      output_dir: "docs"            # GitHub Pages: 设置为 main 分支 /docs
+      git_publish: false            # true 时自动 git add/commit/push
+      git_branch:                   # 留空=当前分支；或填 gh-pages 等
+      masthead_en: "THE DAILY DISPATCH"

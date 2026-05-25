@@ -58,6 +58,7 @@ def send_all(digest: Digest, push_config: PushConfig) -> list[ChannelResult]:
     from .bark import BarkSender
     from .msgraph import MsGraphSender
     from .wecom import WecomSender
+    from .webpaper import WebPaperSender
 
     # 复用 http client（仅 bark/telegram 等用得到）
     http_client: httpx.Client | None = None
@@ -68,6 +69,7 @@ def send_all(digest: Digest, push_config: PushConfig) -> list[ChannelResult]:
             "bark": BarkSender(),
             "msgraph": MsGraphSender(),
             "wecom": WecomSender(),
+            "webpaper": WebPaperSender(),
         }
 
         results: list[ChannelResult] = []
@@ -80,7 +82,7 @@ def send_all(digest: Digest, push_config: PushConfig) -> list[ChannelResult]:
                 logger.info(
                     "[push] dry_run=true, skipping real send for channel=%s to=%s",
                     ch.type,
-                    getattr(ch, "to", None) or getattr(ch, "webhook_url", None) or "N/A",
+                    getattr(ch, "to", None) or getattr(ch, "webhook_url", None) or getattr(ch, "output_dir", None) or "N/A",
                 )
                 results.append(ChannelResult(channel_type=ch.type, success=True, error="dry_run"))
                 continue

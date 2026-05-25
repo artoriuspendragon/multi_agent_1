@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>每日早报 2026-05-26</title>
+<style>
+:root{
+  --paper:#f3ece0; --paper2:#efe7d8; --ink:#1c1a17; --muted:#5a5347;
+  --rule:#2a2722; --accent:#7a1f1a; --link:#243b6b;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:#2f2a25;
+  background-image:
+    radial-gradient(circle at 30% 20%, #3a342d 0%, #221e1a 70%),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 2px, transparent 2px 6px);
+  min-height:100vh; padding:40px 16px 80px;
+  font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,Georgia,"Times New Roman",serif;
+  color:var(--ink); -webkit-font-smoothing:antialiased;
+  perspective:1800px;
+}
+.stage{max-width:1040px;margin:0 auto;perspective:1800px;}
+.sheet{
+  position:relative; background:var(--paper);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,.45), transparent 40%),
+    radial-gradient(circle at 82% 88%, rgba(120,90,50,.10), transparent 45%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+  padding:48px 52px 60px; border-radius:2px;
+  box-shadow:0 2px 0 #d9cfba, 0 30px 60px rgba(0,0,0,.55), inset 0 0 60px rgba(120,90,50,.10);
+  transform-style:preserve-3d; transition:transform .12s ease-out;
+  will-change:transform;
+}
+/* 叠在下方的“纸堆”错觉 */
+.sheet::before,.sheet::after{
+  content:""; position:absolute; inset:0; background:var(--paper2);
+  border-radius:2px; z-index:-1; box-shadow:0 18px 40px rgba(0,0,0,.4);
+}
+.sheet::before{transform:translate(6px,8px) rotate(.5deg);}
+.sheet::after{transform:translate(11px,15px) rotate(-.7deg);}
+
+/* 可翻折的纸角 */
+.peel{
+  position:absolute; top:0; right:0; width:54px; height:54px; cursor:pointer; z-index:5;
+  background:linear-gradient(225deg, var(--paper) 46%, #cdbfa3 50%, #7c6f57 60%, rgba(0,0,0,.25) 100%);
+  box-shadow:-3px 3px 8px rgba(0,0,0,.25);
+  clip-path:polygon(100% 0, 0 0, 100% 100%);
+  transition:width .18s ease, height .18s ease, box-shadow .18s ease;
+}
+.peel:hover{width:84px;height:84px;box-shadow:-6px 6px 14px rgba(0,0,0,.35);}
+.peel-tip{position:absolute;top:6px;right:6px;font-size:10px;color:var(--muted);
+  font-family:system-ui,sans-serif;letter-spacing:.5px;z-index:6;opacity:.7;}
+
+/* 报头 */
+.masthead{text-align:center;border-bottom:4px double var(--rule);padding-bottom:14px;}
+.masthead .corners{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
+  font-family:system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;}
+.title{font-size:clamp(40px,7vw,76px);line-height:1.02;margin:.06em 0 .04em;letter-spacing:.06em;
+  font-weight:700;text-shadow:0 1px 0 rgba(255,255,255,.5);}
+.subtitle{font-size:13px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.35em;text-transform:uppercase;}
+.dateline{display:flex;justify-content:center;gap:18px;align-items:center;margin-top:10px;
+  font-size:13px;color:var(--muted);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:6px 0;font-family:system-ui,sans-serif;}
+
+/* 天气小报头 */
+.weather{margin:18px 0 6px;padding:12px 16px;border:1px solid #c9bfa0;border-left:4px solid var(--accent);
+  background:rgba(255,255,255,.35);font-size:15px;line-height:1.7;}
+.weather b{font-family:system-ui,sans-serif;letter-spacing:.1em;color:var(--accent);}
+
+/* 头条 */
+.lead{padding:20px 0 8px;border-bottom:2px solid var(--rule);column-span:all;}
+.lead h2{font-size:13px;letter-spacing:.4em;color:var(--accent);margin:0 0 10px;
+  font-family:system-ui,sans-serif;text-transform:uppercase;}
+.lead .hl{display:block;text-decoration:none;color:var(--ink);padding:9px 0;border-top:1px dotted #b9ac90;}
+.lead .hl:first-of-type{border-top:none;}
+.lead .hl .t{font-size:clamp(22px,3.2vw,32px);line-height:1.18;font-weight:700;}
+.lead .hl:first-of-type .t{font-size:clamp(28px,4.4vw,44px);}
+.lead .hl .src{font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;}
+
+/* 正文多栏 */
+.columns{margin-top:18px;column-width:300px;column-gap:34px;column-rule:1px solid #cfc2a6;}
+.section{break-inside:avoid;margin:0 0 22px;}
+.section > h3{font-size:19px;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--rule);
+  letter-spacing:.05em;}
+.article{display:block;text-decoration:none;color:var(--ink);padding:8px 6px;margin:0 -6px;
+  border-bottom:1px solid #d7cab0;border-radius:3px;transition:transform .12s ease, box-shadow .12s ease, background .12s ease;}
+.article:last-child{border-bottom:none;}
+.article:hover{background:rgba(255,255,255,.55);transform:translateY(-2px);
+  box-shadow:0 6px 14px rgba(0,0,0,.12);}
+.article .t{font-size:16px;line-height:1.45;font-weight:600;}
+.article:hover .t{text-decoration:underline;text-decoration-color:var(--accent);}
+.article .src{display:block;margin-top:3px;font-size:11.5px;color:var(--muted);
+  font-family:system-ui,sans-serif;letter-spacing:.04em;}
+
+.colophon{margin-top:30px;padding-top:14px;border-top:4px double var(--rule);text-align:center;
+  font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.08em;}
+.colophon a{color:var(--link);text-decoration:none;}
+.colophon a:hover{text-decoration:underline;}
+
+@media (max-width:680px){
+  body{padding:18px 8px 50px;}
+  .sheet{padding:26px 20px 36px;}
+  .columns{column-width:auto;column-count:1;}
+}
+@media (prefers-reduced-motion:reduce){
+  .sheet{transition:none!important;}
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="sheet">
+    <div class="peel" title="回到顶部"></div>
+    <span class="peel-tip">▴</span>
+    <header class="masthead">
+      <div class="corners"><span>第 20260526 期</span><span>AI 编纂 · 仅供阅读</span></div>
+      <h1 class="title">每日早报 2026-05-26</h1>
+      <div class="subtitle">THE DAILY DISPATCH</div>
+      <div class="dateline"><span>2026年5月26日　星期二　农历见黄历</span></div>
+    </header>
+    <div class="weather"><b>🌤️ 今日天气</b><br>多云转晴，气温 14–22°C，微风。出门上班带件薄外套就够；午餐时段阳光正好，不必带伞；空气质量良，无需口罩。</div>
+    <div class="lead"><h2>📰 今日头条</h2><a class="hl" href="https://www.vatican.va/news/ai" target="_blank" rel="noopener"><span class="t">教皇利奥十四世发布首份关于 AI 的通谕，呼吁放缓 AI 发展步伐</span><span class="src">— vatican.va</span></a><a class="hl" href="https://www.chinanews.com.cn/world/a" target="_blank" rel="noopener"><span class="t">习近平为塞尔维亚总统武契奇颁授“友谊勋章”</span><span class="src">— chinanews.com.cn</span></a><a class="hl" href="https://www.reuters.com/world/kyiv" target="_blank" rel="noopener"><span class="t">俄军对基辅发动大规模袭击，动用“榛树”高超音速导弹</span><span class="src">— reuters.com</span></a><a class="hl" href="https://www.nature.com/fake-cites" target="_blank" rel="noopener"><span class="t">生物医学论文中虚假引用自 2023 年以来增长超 12 倍</span><span class="src">— nature.com</span></a></div>
+    <div class="columns">
+      <section class="section"><h3>🤖 AI与技术</h3><a class="article" href="https://www.together.ai/blog/deepseek" target="_blank" rel="noopener"><span class="t">DeepSeek 模型优化降低 HBM 使用量，或赋能国产 AI 硬件生态</span><span class="src">together.ai</span></a><a class="article" href="https://huggingface.co/blog/nuextract3" target="_blank" rel="noopener"><span class="t">NuExtract3 发布：开源 4B 视觉语言模型，支持 OCR 与结构化提取</span><span class="src">huggingface.co</span></a><a class="article" href="https://www.reddit.com/r/LocalLLaMA/x" target="_blank" rel="noopener"><span class="t">Qwen3.6 27B 在 V100 上实现每秒 1000 token 生成速度</span><span class="src">reddit.com</span></a><a class="article" href="https://lobste.rs/s/ai-audit" target="_blank" rel="noopener"><span class="t">AI 代理需要审计追踪而非更多自主权</span><span class="src">lobste.rs</span></a><a class="article" href="https://research.facebook.com/delta" target="_blank" rel="noopener"><span class="t">Yann LeCun 团队提出 Delta Attention Residuals 方法</span><span class="src">research.facebook.com</span></a><a class="article" href="https://news.ycombinator.com/item?id=1" target="_blank" rel="noopener"><span class="t">WorkOS 发布 auth.md：基于 OAuth 标准的开放代理注册协议</span><span class="src">news.ycombinator.com</span></a></section><section class="section"><h3>🌍 国际新闻</h3><a class="article" href="https://www.chinanews.com.cn/world/b" target="_blank" rel="noopener"><span class="t">李强同巴基斯坦总理夏巴兹会谈</span><span class="src">chinanews.com.cn</span></a><a class="article" href="https://www.who.int/ebola" target="_blank" rel="noopener"><span class="t">世卫组织：刚果（金）已发现超 900 例埃博拉疑似病例</span><span class="src">who.int</span></a><a class="article" href="https://www.bloomberg.com/oil" target="_blank" rel="noopener"><span class="t">美伊谈判释放积极信号，国际油价大跌</span><span class="src">bloomberg.com</span></a><a class="article" href="https://apnews.com/statement" target="_blank" rel="noopener"><span class="t">八国外长发表联合声明谴责以色列国家安全部长</span><span class="src">apnews.com</span></a></section><section class="section"><h3>💰 财经</h3><a class="article" href="https://www.ft.com/softbank" target="_blank" rel="noopener"><span class="t">软银股价创历史新高，受 OpenAI 投资回报预期提振</span><span class="src">ft.com</span></a><a class="article" href="https://venturebeat.com/wix" target="_blank" rel="noopener"><span class="t">Wix 宣布裁员约 1000 人，占员工总数 20%</span><span class="src">venturebeat.com</span></a><a class="article" href="https://www.chinanews.com.cn/finance/c" target="_blank" rel="noopener"><span class="t">宇树科技 IPO 6 月 1 日上会</span><span class="src">chinanews.com.cn</span></a></section><section class="section"><h3>🎮 游戏</h3><a class="article" href="https://www.yystv.cn/p/star-citizen" target="_blank" rel="noopener"><span class="t">Star Citizen 累计融资突破 10 亿美元，仍无确定发售日期</span><span class="src">yystv.cn</span></a></section>
+    </div>
+    <footer class="colophon">
+      本报由 AI 助手自动编纂　·　2026-05-26 08:30　·
+      <a href="archive.html">查看往期 →</a>
+    </footer>
+  </div>
+</div>
+<script>
+(function(){
+  var sheet=document.querySelector('.sheet'), stage=document.querySelector('.stage');
+  if(!sheet||!stage) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
+  if(!reduce && fine){
+    stage.addEventListener('mousemove', function(e){
+      var r=sheet.getBoundingClientRect();
+      var cx=(e.clientX-(r.left+r.width/2))/r.width;
+      var cy=(e.clientY-(r.top+r.height/2))/r.height;
+      sheet.style.transform='rotateY('+(cx*3.2).toFixed(2)+'deg) rotateX('+(-cy*2.6).toFixed(2)+'deg)';
+    });
+    stage.addEventListener('mouseleave', function(){ sheet.style.transform='rotateY(0) rotateX(0)'; });
+  }
+  var peel=document.querySelector('.peel');
+  if(peel){ peel.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); }); }
+})();
+</script>
+</body>
+</html>

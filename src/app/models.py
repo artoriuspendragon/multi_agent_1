@@ -49,10 +49,14 @@ class RawItem(BaseModel):
 
 
 class Section(BaseModel):
-    """早报中的一个分组，包含分组名与条目列表。"""
+    """早报中的一个分组，包含分组名与条目列表。
+
+    text：用于非列表版面（如天气）的整段文字内容；与 items 二选一。
+    """
 
     name: str
     items: list[RawItem] = Field(default_factory=list)
+    text: Optional[str] = None
 
     model_config = {"str_strip_whitespace": True}
 
