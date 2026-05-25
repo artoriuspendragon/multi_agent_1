@@ -107,7 +107,7 @@ PY
 可先用 cron 定时触发（例如每天早上 7:00）：
 
 ```bash
-0 7 * * * cd /path/to/multi_agent_1 && /path/to/.venv/bin/python3 - <<'PY'
+0 7 * * * cd /path/to/daily-dispatch && /path/to/.venv/bin/python3 - <<'PY'
 from app import load_config, run
 cfg = load_config("config.yaml")
 res = run(cfg)
