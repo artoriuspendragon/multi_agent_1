@@ -35,6 +35,8 @@ class WebPaperSender:
             git_publish=channel.git_publish,
             git_branch=channel.git_branch,
             masthead_en=channel.masthead_en,
+            multi_page=channel.multi_page,
+            show_summaries=channel.show_summaries,
         )
         logger.info(
             "[webpaper] wrote %s (index=%s, archive=%s)",

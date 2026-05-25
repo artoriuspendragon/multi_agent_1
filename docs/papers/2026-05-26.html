@@ -10,144 +10,129 @@
   --rule:#2a2722; --accent:#7a1f1a; --link:#243b6b;
 }
 *{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
+html{scroll-behavior:smooth;}
+body{margin:0;padding:40px 16px 90px;min-height:100vh;
   background:#2f2a25;
-  background-image:
-    radial-gradient(circle at 30% 20%, #3a342d 0%, #221e1a 70%),
-    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 2px, transparent 2px 6px);
-  min-height:100vh; padding:40px 16px 80px;
+  background-image:radial-gradient(circle at 30% 10%, #3a342d 0%, #221e1a 75%);
   font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",STSong,SimSun,Georgia,"Times New Roman",serif;
-  color:var(--ink); -webkit-font-smoothing:antialiased;
-  perspective:1800px;
-}
-.stage{max-width:1040px;margin:0 auto;perspective:1800px;}
-.sheet{
-  position:relative; background:var(--paper);
-  background-image:
-    radial-gradient(circle at 18% 12%, rgba(255,255,255,.45), transparent 40%),
-    radial-gradient(circle at 82% 88%, rgba(120,90,50,.10), transparent 45%),
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
-  padding:48px 52px 60px; border-radius:2px;
-  box-shadow:0 2px 0 #d9cfba, 0 30px 60px rgba(0,0,0,.55), inset 0 0 60px rgba(120,90,50,.10);
-  transform-style:preserve-3d; transition:transform .12s ease-out;
-  will-change:transform;
-}
-/* 叠在下方的“纸堆”错觉 */
-.sheet::before,.sheet::after{
-  content:""; position:absolute; inset:0; background:var(--paper2);
-  border-radius:2px; z-index:-1; box-shadow:0 18px 40px rgba(0,0,0,.4);
-}
-.sheet::before{transform:translate(6px,8px) rotate(.5deg);}
-.sheet::after{transform:translate(11px,15px) rotate(-.7deg);}
+  color:var(--ink);-webkit-font-smoothing:antialiased;perspective:2000px;}
+.stage{max-width:1060px;margin:0 auto;perspective:2000px;}
 
-/* 可翻折的纸角 */
-.peel{
-  position:absolute; top:0; right:0; width:54px; height:54px; cursor:pointer; z-index:5;
+.sheet{position:relative;background:var(--paper);
+  background-image:
+    radial-gradient(circle at 18% 10%, rgba(255,255,255,.45), transparent 42%),
+    radial-gradient(circle at 84% 92%, rgba(120,90,50,.10), transparent 46%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/></svg>");
+  padding:46px 52px 56px;border-radius:2px;margin:0 auto 46px;
+  box-shadow:0 2px 0 #d9cfba, 0 30px 60px rgba(0,0,0,.55), inset 0 0 60px rgba(120,90,50,.10);
+  transform-style:preserve-3d;transition:transform .12s ease-out;will-change:transform;}
+.sheet::before,.sheet::after{content:"";position:absolute;inset:0;background:var(--paper2);
+  border-radius:2px;z-index:-1;box-shadow:0 18px 40px rgba(0,0,0,.4);}
+.sheet::before{transform:translate(6px,8px) rotate(.4deg);}
+.sheet::after{transform:translate(11px,15px) rotate(-.6deg);}
+
+.peel{position:absolute;top:0;right:0;width:50px;height:50px;cursor:pointer;z-index:5;
   background:linear-gradient(225deg, var(--paper) 46%, #cdbfa3 50%, #7c6f57 60%, rgba(0,0,0,.25) 100%);
-  box-shadow:-3px 3px 8px rgba(0,0,0,.25);
-  clip-path:polygon(100% 0, 0 0, 100% 100%);
-  transition:width .18s ease, height .18s ease, box-shadow .18s ease;
-}
-.peel:hover{width:84px;height:84px;box-shadow:-6px 6px 14px rgba(0,0,0,.35);}
-.peel-tip{position:absolute;top:6px;right:6px;font-size:10px;color:var(--muted);
-  font-family:system-ui,sans-serif;letter-spacing:.5px;z-index:6;opacity:.7;}
+  box-shadow:-3px 3px 8px rgba(0,0,0,.25);clip-path:polygon(100% 0,0 0,100% 100%);
+  transition:width .18s,height .18s,box-shadow .18s;}
+.peel:hover{width:80px;height:80px;box-shadow:-6px 6px 14px rgba(0,0,0,.35);}
 
 /* 报头 */
 .masthead{text-align:center;border-bottom:4px double var(--rule);padding-bottom:14px;}
 .masthead .corners{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);
   font-family:system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;}
-.title{font-size:clamp(40px,7vw,76px);line-height:1.02;margin:.06em 0 .04em;letter-spacing:.06em;
+.title{font-size:clamp(40px,7vw,78px);line-height:1.02;margin:.06em 0 .04em;letter-spacing:.06em;
   font-weight:700;text-shadow:0 1px 0 rgba(255,255,255,.5);}
 .subtitle{font-size:13px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.35em;text-transform:uppercase;}
-.dateline{display:flex;justify-content:center;gap:18px;align-items:center;margin-top:10px;
-  font-size:13px;color:var(--muted);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
-  padding:6px 0;font-family:system-ui,sans-serif;}
+.dateline{display:flex;justify-content:center;gap:18px;margin-top:10px;font-size:13px;color:var(--muted);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:6px 0;font-family:system-ui,sans-serif;}
 
-/* 天气小报头 */
-.weather{margin:18px 0 6px;padding:12px 16px;border:1px solid #c9bfa0;border-left:4px solid var(--accent);
-  background:rgba(255,255,255,.35);font-size:15px;line-height:1.7;}
-.weather b{font-family:system-ui,sans-serif;letter-spacing:.1em;color:var(--accent);}
+.weatherbar{margin:16px 0 4px;padding:10px 16px;border:1px solid #c9bfa0;border-left:4px solid var(--accent);
+  background:rgba(255,255,255,.35);font-size:14px;line-height:1.65;}
+.weatherbar b{font-family:system-ui,sans-serif;color:var(--accent);letter-spacing:.1em;}
 
-/* 头条 */
-.lead{padding:20px 0 8px;border-bottom:2px solid var(--rule);column-span:all;}
-.lead h2{font-size:13px;letter-spacing:.4em;color:var(--accent);margin:0 0 10px;
-  font-family:system-ui,sans-serif;text-transform:uppercase;}
-.lead .hl{display:block;text-decoration:none;color:var(--ink);padding:9px 0;border-top:1px dotted #b9ac90;}
-.lead .hl:first-of-type{border-top:none;}
-.lead .hl .t{font-size:clamp(22px,3.2vw,32px);line-height:1.18;font-weight:700;}
-.lead .hl:first-of-type .t{font-size:clamp(28px,4.4vw,44px);}
-.lead .hl .src{font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;}
+/* 头版网格：头条 + 导读 */
+.frontgrid{display:grid;grid-template-columns:1fr 270px;gap:34px;margin-top:18px;}
+.lead-label{font-size:13px;letter-spacing:.4em;color:var(--accent);font-family:system-ui,sans-serif;
+  text-transform:uppercase;margin-bottom:6px;}
+.lead-main{display:block;text-decoration:none;color:var(--ink);padding-bottom:14px;border-bottom:2px solid var(--rule);margin-bottom:14px;}
+.lead-main .lt{font-size:clamp(28px,4.6vw,46px);line-height:1.14;font-weight:700;}
+.lead-main .standfirst{font-size:17px;line-height:1.7;color:#34302a;margin-top:10px;font-style:normal;}
+.lead-main .by{font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;margin-top:8px;}
+.lead-rest .hl{display:block;text-decoration:none;color:var(--ink);padding:10px 0;border-top:1px dotted #b9ac90;}
+.lead-rest .hl .t{font-size:19px;line-height:1.3;font-weight:700;}
+.lead-rest .hl .s{display:block;font-size:13.5px;color:#4a443b;line-height:1.55;margin-top:3px;}
 
-/* 正文多栏 */
-.columns{margin-top:18px;column-width:300px;column-gap:34px;column-rule:1px solid #cfc2a6;}
-.section{break-inside:avoid;margin:0 0 22px;}
-.section > h3{font-size:19px;margin:0 0 8px;padding-bottom:6px;border-bottom:2px solid var(--rule);
-  letter-spacing:.05em;}
-.article{display:block;text-decoration:none;color:var(--ink);padding:8px 6px;margin:0 -6px;
-  border-bottom:1px solid #d7cab0;border-radius:3px;transition:transform .12s ease, box-shadow .12s ease, background .12s ease;}
-.article:last-child{border-bottom:none;}
-.article:hover{background:rgba(255,255,255,.55);transform:translateY(-2px);
-  box-shadow:0 6px 14px rgba(0,0,0,.12);}
-.article .t{font-size:16px;line-height:1.45;font-weight:600;}
-.article:hover .t{text-decoration:underline;text-decoration-color:var(--accent);}
-.article .src{display:block;margin-top:3px;font-size:11.5px;color:var(--muted);
-  font-family:system-ui,sans-serif;letter-spacing:.04em;}
+.index{border:1px solid var(--rule);background:rgba(255,255,255,.28);padding:14px 16px;height:max-content;}
+.index h3{margin:0 0 10px;font-size:16px;border-bottom:1px solid var(--rule);padding-bottom:6px;letter-spacing:.1em;}
+.index ul{list-style:none;margin:0;padding:0;}
+.index li{margin:0 0 7px;}
+.index a{display:flex;justify-content:space-between;gap:8px;text-decoration:none;color:var(--ink);font-size:14px;}
+.index a:hover{color:var(--accent);}
+.index a .pg{color:var(--muted);font-family:system-ui,sans-serif;white-space:nowrap;}
 
-.colophon{margin-top:30px;padding-top:14px;border-top:4px double var(--rule);text-align:center;
-  font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.08em;}
+/* 内页 */
+.pagehead{display:flex;align-items:baseline;justify-content:space-between;border-bottom:3px double var(--rule);
+  padding-bottom:8px;margin-bottom:14px;}
+.pagehead h2{margin:0;font-size:26px;letter-spacing:.06em;}
+.pagehead .ed{font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.1em;}
+.columns{column-width:320px;column-gap:36px;column-rule:1px solid #cfc2a6;}
+.art{break-inside:avoid;display:block;text-decoration:none;color:var(--ink);padding:12px;margin:0 -12px 8px;
+  border-bottom:1px solid #d7cab0;border-radius:4px;
+  transition:transform .12s,box-shadow .12s,background .12s;}
+.art:hover{background:rgba(255,255,255,.55);transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.12);}
+.art .at{font-size:18px;line-height:1.34;font-weight:700;}
+.art:hover .at{text-decoration:underline;text-decoration-color:var(--accent);}
+.art .by{font-size:11.5px;color:var(--muted);font-family:system-ui,sans-serif;margin:4px 0 6px;letter-spacing:.03em;}
+.art .as{font-size:14px;line-height:1.66;color:#34302a;margin:0;text-align:justify;}
+.art .more{display:inline-block;margin-top:6px;font-size:12px;color:var(--link);font-family:system-ui,sans-serif;}
+
+/* Epic 卡片 */
+.epic{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
+.epic a{text-decoration:none;color:inherit;border:1px solid #cfc2a6;border-radius:8px;overflow:hidden;background:rgba(255,255,255,.45);}
+.epic img{width:100%;height:150px;object-fit:cover;display:block;}
+.epic .ec{padding:10px 12px;}
+.epic .et{font-weight:700;font-size:15px;}
+.epic .em{font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;margin-top:5px;}
+
+.colophon{margin-top:26px;padding-top:12px;border-top:4px double var(--rule);display:flex;justify-content:space-between;
+  font-size:12px;color:var(--muted);font-family:system-ui,sans-serif;letter-spacing:.06em;}
 .colophon a{color:var(--link);text-decoration:none;}
 .colophon a:hover{text-decoration:underline;}
 
-@media (max-width:680px){
+@media (max-width:760px){
   body{padding:18px 8px 50px;}
   .sheet{padding:26px 20px 36px;}
+  .frontgrid{grid-template-columns:1fr;}
   .columns{column-width:auto;column-count:1;}
 }
-@media (prefers-reduced-motion:reduce){
-  .sheet{transition:none!important;}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none!important;}}
+@media print{
+  body{background:#fff;padding:0;perspective:none;}
+  .sheet{box-shadow:none;margin:0;page-break-after:always;}
+  .sheet::before,.sheet::after,.peel{display:none;}
 }
 </style>
 </head>
 <body>
 <div class="stage">
-  <div class="sheet">
-    <div class="peel" title="回到顶部"></div>
-    <span class="peel-tip">▴</span>
-    <header class="masthead">
-      <div class="corners"><span>第 20260526 期</span><span>AI 编纂 · 仅供阅读</span></div>
-      <h1 class="title">每日早报 2026-05-26</h1>
-      <div class="subtitle">THE DAILY DISPATCH</div>
-      <div class="dateline"><span>2026年5月26日　星期二　农历见黄历</span></div>
-    </header>
-    <div class="weather"><b>🌤️ 今日天气</b><br>多云转晴，气温 14–22°C，微风。出门上班带件薄外套就够；午餐时段阳光正好，不必带伞；空气质量良，无需口罩。</div>
-    <div class="lead"><h2>📰 今日头条</h2><a class="hl" href="https://www.vatican.va/news/ai" target="_blank" rel="noopener"><span class="t">教皇利奥十四世发布首份关于 AI 的通谕，呼吁放缓 AI 发展步伐</span><span class="src">— vatican.va</span></a><a class="hl" href="https://www.chinanews.com.cn/world/a" target="_blank" rel="noopener"><span class="t">习近平为塞尔维亚总统武契奇颁授“友谊勋章”</span><span class="src">— chinanews.com.cn</span></a><a class="hl" href="https://www.reuters.com/world/kyiv" target="_blank" rel="noopener"><span class="t">俄军对基辅发动大规模袭击，动用“榛树”高超音速导弹</span><span class="src">— reuters.com</span></a><a class="hl" href="https://www.nature.com/fake-cites" target="_blank" rel="noopener"><span class="t">生物医学论文中虚假引用自 2023 年以来增长超 12 倍</span><span class="src">— nature.com</span></a></div>
-    <div class="columns">
-      <section class="section"><h3>🤖 AI与技术</h3><a class="article" href="https://www.together.ai/blog/deepseek" target="_blank" rel="noopener"><span class="t">DeepSeek 模型优化降低 HBM 使用量，或赋能国产 AI 硬件生态</span><span class="src">together.ai</span></a><a class="article" href="https://huggingface.co/blog/nuextract3" target="_blank" rel="noopener"><span class="t">NuExtract3 发布：开源 4B 视觉语言模型，支持 OCR 与结构化提取</span><span class="src">huggingface.co</span></a><a class="article" href="https://www.reddit.com/r/LocalLLaMA/x" target="_blank" rel="noopener"><span class="t">Qwen3.6 27B 在 V100 上实现每秒 1000 token 生成速度</span><span class="src">reddit.com</span></a><a class="article" href="https://lobste.rs/s/ai-audit" target="_blank" rel="noopener"><span class="t">AI 代理需要审计追踪而非更多自主权</span><span class="src">lobste.rs</span></a><a class="article" href="https://research.facebook.com/delta" target="_blank" rel="noopener"><span class="t">Yann LeCun 团队提出 Delta Attention Residuals 方法</span><span class="src">research.facebook.com</span></a><a class="article" href="https://news.ycombinator.com/item?id=1" target="_blank" rel="noopener"><span class="t">WorkOS 发布 auth.md：基于 OAuth 标准的开放代理注册协议</span><span class="src">news.ycombinator.com</span></a></section><section class="section"><h3>🌍 国际新闻</h3><a class="article" href="https://www.chinanews.com.cn/world/b" target="_blank" rel="noopener"><span class="t">李强同巴基斯坦总理夏巴兹会谈</span><span class="src">chinanews.com.cn</span></a><a class="article" href="https://www.who.int/ebola" target="_blank" rel="noopener"><span class="t">世卫组织：刚果（金）已发现超 900 例埃博拉疑似病例</span><span class="src">who.int</span></a><a class="article" href="https://www.bloomberg.com/oil" target="_blank" rel="noopener"><span class="t">美伊谈判释放积极信号，国际油价大跌</span><span class="src">bloomberg.com</span></a><a class="article" href="https://apnews.com/statement" target="_blank" rel="noopener"><span class="t">八国外长发表联合声明谴责以色列国家安全部长</span><span class="src">apnews.com</span></a></section><section class="section"><h3>💰 财经</h3><a class="article" href="https://www.ft.com/softbank" target="_blank" rel="noopener"><span class="t">软银股价创历史新高，受 OpenAI 投资回报预期提振</span><span class="src">ft.com</span></a><a class="article" href="https://venturebeat.com/wix" target="_blank" rel="noopener"><span class="t">Wix 宣布裁员约 1000 人，占员工总数 20%</span><span class="src">venturebeat.com</span></a><a class="article" href="https://www.chinanews.com.cn/finance/c" target="_blank" rel="noopener"><span class="t">宇树科技 IPO 6 月 1 日上会</span><span class="src">chinanews.com.cn</span></a></section><section class="section"><h3>🎮 游戏</h3><a class="article" href="https://www.yystv.cn/p/star-citizen" target="_blank" rel="noopener"><span class="t">Star Citizen 累计融资突破 10 亿美元，仍无确定发售日期</span><span class="src">yystv.cn</span></a></section>
-    </div>
-    <footer class="colophon">
-      本报由 AI 助手自动编纂　·　2026-05-26 08:30　·
-      <a href="../archive.html">查看往期 →</a>
-    </footer>
-  </div>
+<div class="sheet front" id="page-1"><div class="peel" title="回到顶部"></div><header class="masthead"><div class="corners"><span>第 20260526 期</span><span>AI 编纂 · 仅供阅读</span></div><h1 class="title">每日早报 2026-05-26</h1><div class="subtitle">THE DAILY DISPATCH</div><div class="dateline"><span>2026年5月26日　星期二</span></div></header><div class="weatherbar"><b>🌤️ 今日天气</b>　多云转晴，14–22°C，微风。出门上班带件薄外套即可；午餐时段阳光正好不必带伞；空气质量良，无需口罩。</div><div class="frontgrid"><div class="lead"><div class="lead-label">今日头条</div><a class="lead-main" href="https://www.vatican.va/ai" target="_blank" rel="noopener"><span class="lt">教皇利奥十四世发布首份关于 AI 的通谕，呼吁放缓发展</span><p class="standfirst">教皇利奥十四世发布通谕《Magnifica humanitas》，呼吁各国政府放缓 AI 发展步伐并加强治理。文件描述了 AI 的不可预测性，据称受 Anthropic 联合创始人观点影响，强调技术伦理与人类尊严。</p><div class="by">梵蒂冈</div></a><div class="lead-rest"><a class="hl" href="https://www.chinanews.com.cn/w/a" target="_blank" rel="noopener"><span class="t">习近平为塞尔维亚总统武契奇颁授“友谊勋章”</span><span class="s">习近平在人民大会堂为来访的塞尔维亚总统武契奇颁授“友谊勋章”，双方签署构建新时代中塞命运共同体联合声明。</span></a><a class="hl" href="https://www.reuters.com/kyiv" target="_blank" rel="noopener"><span class="t">俄军对基辅发动大规模袭击，动用高超音速导弹</span><span class="s">俄罗斯对基辅发动开战以来规模最大的空袭之一，使用“榛树”高超音速导弹，乌方称造成上百人伤亡。</span></a></div></div><aside class="index"><h3>本期导读</h3><ul><li><a href="#page-2"><span>🤖 AI与大模型</span><span class="pg">第 2 版</span></a></li><li><a href="#page-3"><span>💻 开发与编程</span><span class="pg">第 3 版</span></a></li><li><a href="#page-4"><span>🌍 国际</span><span class="pg">第 4 版</span></a></li><li><a href="#page-5"><span>💰 财经商业</span><span class="pg">第 5 版</span></a></li><li><a href="#page-6"><span>🎮 游戏</span><span class="pg">第 6 版</span></a></li><li><a href="#page-7"><span>💬 观点·社论</span><span class="pg">第 7 版</span></a></li></ul></aside></div><div class="colophon"><span>第 1 版 · 头版</span><a href="../archive.html">查看往期 →</a></div></div><div class="sheet" id="page-2"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>🤖 AI与大模型</h2><span class="ed">第 2 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://huggingface.co/blog/nuextract3" target="_blank" rel="noopener"><span class="at">NuExtract3 发布：开源 4B 视觉语言模型</span><div class="by">Hugging Face</div><p class="as">NuExtract3 发布，是一款 4B 参数的开源视觉语言模型，支持 Markdown、OCR 与结构化数据提取，在文档理解任务上表现突出，可本地部署。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://www.together.ai/blog/deepseek" target="_blank" rel="noopener"><span class="at">DeepSeek 优化降低 HBM 使用量</span><div class="by">Together AI</div><p class="as">DeepSeek 发布新一代推理优化，显著降低高带宽内存占用，业界认为有望赋能国产 AI 硬件生态、降低大模型部署成本。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://www.reddit.com/r/LocalLLaMA/x" target="_blank" rel="noopener"><span class="at">Qwen3.6 27B 在 V100 上达每秒千 token</span><div class="by">r/LocalLLaMA</div><p class="as">社区实测 Qwen3.6 27B 在老旧 V100 显卡上实现每秒约 1000 token 的生成速度，引发本地推理优化讨论。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://lobste.rs/s/ai" target="_blank" rel="noopener"><span class="at">AI 代理需要审计追踪而非更多自主权</span><div class="by">Lobsters</div><p class="as">一篇被广泛讨论的文章主张，企业部署 AI 代理时应优先建立可审计的操作日志，而非一味扩大其自主决策范围。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div><div class="sheet" id="page-3"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>💻 开发与编程</h2><span class="ed">第 3 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://news.ycombinator.com/item?id=1" target="_blank" rel="noopener"><span class="at">WorkOS 发布 auth.md：开放代理注册协议</span><div class="by">Hacker News</div><p class="as">WorkOS 推出基于 OAuth 标准的 auth.md，旨在为 AI 代理提供统一的身份注册与授权规范，已在 HN 引发热议。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://www.seangoedecke.com/x" target="_blank" rel="noopener"><span class="at">一个 14 年的副项目终于发布 1.0</span><div class="by">Sean Goedecke</div><p class="as">作者复盘了一个持续十四年的开源副项目如何最终发布 1.0，讨论了长期维护与动力管理。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div><div class="sheet" id="page-4"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>🌍 国际</h2><span class="ed">第 4 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://www.who.int/ebola" target="_blank" rel="noopener"><span class="at">世卫组织：刚果（金）发现超 900 例埃博拉疑似病例</span><div class="by">WHO</div><p class="as">世卫组织通报刚果（金）东部已发现超过 900 例埃博拉疑似病例，正紧急调配疫苗与医疗资源。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://www.bloomberg.com/oil" target="_blank" rel="noopener"><span class="at">美伊谈判释放积极信号，国际油价大跌</span><div class="by">Bloomberg</div><p class="as">美伊新一轮谈判传出积极信号，市场预期中东供应风险下降，国际油价单日大幅回落。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div><div class="sheet" id="page-5"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>💰 财经商业</h2><span class="ed">第 5 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://www.ft.com/softbank" target="_blank" rel="noopener"><span class="at">软银股价创历史新高</span><div class="by">FT</div><p class="as">受 OpenAI 等投资回报预期提振，软银集团股价周一上涨逾 4%，创历史新高。</p><span class="more">阅读全文 →</span></a><a class="art" href="https://venturebeat.com/wix" target="_blank" rel="noopener"><span class="at">Wix 宣布裁员约 1000 人</span><div class="by">VentureBeat</div><p class="as">建站平台 Wix 宣布裁员约 1000 人，占员工总数约 20%，称将更多资源投入 AI 产品。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div><div class="sheet" id="page-6"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>🎮 游戏</h2><span class="ed">第 6 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://www.yystv.cn/p/sc" target="_blank" rel="noopener"><span class="at">Star Citizen 累计融资突破 10 亿美元</span><div class="by">游研社</div><p class="as">开发长达十四年的太空模拟游戏 Star Citizen 累计众筹融资突破 10 亿美元，但仍无确定发售日期。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div><div class="sheet" id="page-7"><div class="peel" title="回到顶部"></div><div class="pagehead"><h2>💬 观点·社论</h2><span class="ed">第 7 版 / 共 7 版</span></div><div class="columns"><a class="art" href="https://www.seangoedecke.com/ai-roi" target="_blank" rel="noopener"><span class="at">我们是否高估了 AI 编程的当下收益？</span><div class="by">评论</div><p class="as">作者认为，尽管 AI 编程工具进步显著，但在大型遗留系统中证明其投入产出比仍然困难，需理性看待。</p><span class="more">阅读全文 →</span></a></div><div class="colophon"><a href="#page-1">← 返回头版</a><a href="../archive.html">往期 →</a></div></div>
 </div>
 <script>
 (function(){
-  var sheet=document.querySelector('.sheet'), stage=document.querySelector('.stage');
-  if(!sheet||!stage) return;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var fine = window.matchMedia && window.matchMedia('(pointer:fine)').matches;
-  if(!reduce && fine){
-    stage.addEventListener('mousemove', function(e){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var fine=window.matchMedia&&window.matchMedia('(pointer:fine)').matches;
+  document.querySelectorAll('.sheet').forEach(function(sheet){
+    var peel=sheet.querySelector('.peel');
+    if(peel) peel.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+    if(reduce||!fine) return;
+    sheet.addEventListener('mousemove',function(e){
       var r=sheet.getBoundingClientRect();
-      var cx=(e.clientX-(r.left+r.width/2))/r.width;
-      var cy=(e.clientY-(r.top+r.height/2))/r.height;
-      sheet.style.transform='rotateY('+(cx*3.2).toFixed(2)+'deg) rotateX('+(-cy*2.6).toFixed(2)+'deg)';
+      var cx=(e.clientX-(r.left+r.width/2))/r.width, cy=(e.clientY-(r.top+r.height/2))/r.height;
+      sheet.style.transform='rotateY('+(cx*2.4).toFixed(2)+'deg) rotateX('+(-cy*2).toFixed(2)+'deg)';
     });
-    stage.addEventListener('mouseleave', function(){ sheet.style.transform='rotateY(0) rotateX(0)'; });
-  }
-  var peel=document.querySelector('.peel');
-  if(peel){ peel.addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); }); }
+    sheet.addEventListener('mouseleave',function(){sheet.style.transform='rotateY(0) rotateX(0)';});
+  });
 })();
 </script>
 </body>

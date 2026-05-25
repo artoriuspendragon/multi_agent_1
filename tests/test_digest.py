@@ -144,9 +144,10 @@ def test_agent_caps_headline_items(monkeypatch):
                 "api_key": "k",
                 "model": "MiniMax-M2.7",
                 "constraints": "x",
-                "output_format": "rendered",
+                "output_format": "structured",
                 "timeout_seconds": 60,
                 "max_input_items": 50,
+                "headline_count": 5,
             },
         }
     )

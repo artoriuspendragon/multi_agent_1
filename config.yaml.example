@@ -84,12 +84,24 @@ digest:
     endpoint: "https://api.minimaxi.com/v1/text/chatcompletion_v2"
     api_key: "${DIGEST_AGENT_API_KEY}"
     model: "MiniMax-M2.7"
-    constraints: "按报纸版面输出：头条<=5，其它版面每类5-10条；优先级 AI/Java > 国际 > 游戏 > 其他；做语义去重；可选八卦版面；输出完整 HTML"
-    output_format: rendered
+    constraints: "优先级 AI/编程 > 国际 > 财经 > 游戏 > 其他；做语义去重；英文翻译为中文；只输出 JSON（HTML 由程序渲染）"
+    output_format: structured
     timeout_seconds: 120
     max_input_items: 120
-    include_summary: false
+    include_summary: true
     max_summary_chars: 200
+    # 报纸版面与摘要（newspaper 模式）；sections 留空则用内置默认 12 版
+    headline_count: 8
+    items_per_section: 18
+    include_item_summary: true
+    summary_target_chars: 140
+    # sections:
+    #   - "📰 今日头条"
+    #   - "🤖 AI与大模型"
+    #   - "💻 开发与编程"
+    #   - "🌍 国际"
+    #   - "💰 财经商业"
+    #   - "🎮 游戏"
 
 push:
   channels:
@@ -107,3 +119,5 @@ push:
       git_publish: false            # true 时自动 git add/commit/push
       git_branch:                   # 留空=当前分支；或填 gh-pages 等
       masthead_en: "THE DAILY DISPATCH"
+      multi_page: true              # 多版：头版 + 各版面分页
+      show_summaries: true          # 内页展示每条摘要

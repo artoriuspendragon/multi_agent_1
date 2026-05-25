@@ -142,6 +142,22 @@ class FilterConfig(BaseModel):
 # ---------- 早报 ----------
 
 
+# 默认报纸版面（news 类目，按优先级排序；天气在前由 agent 动态加，Epic 在后由代码加）
+DEFAULT_DIGEST_SECTIONS: list[str] = [
+    "📰 今日头条",
+    "🤖 AI与大模型",
+    "💻 开发与编程",
+    "🔬 科技与科学",
+    "🌍 国际",
+    "🇨🇳 国内时政",
+    "💰 财经商业",
+    "🚀 创业与产品",
+    "🎮 游戏",
+    "🎬 文化娱乐",
+    "💬 观点·社论",
+]
+
+
 class DigestAgentConfig(BaseModel):
     """早报生成 Agent 配置（strategy 含 agent 时必填）。"""
 
@@ -155,6 +171,12 @@ class DigestAgentConfig(BaseModel):
     include_summary: bool = False
     max_summary_chars: int = Field(default=200, ge=0, le=2000)
     prompt_template: Optional[str] = None
+    # ----- 报纸版面 / 摘要（newspaper 模式）-----
+    sections: list[str] = Field(default_factory=lambda: list(DEFAULT_DIGEST_SECTIONS))
+    headline_count: int = Field(default=8, ge=1, le=20)       # 头条最多条数
+    items_per_section: int = Field(default=18, ge=1, le=50)   # 其它版面每版最多条数
+    include_item_summary: bool = True                         # 让 agent 为每条写摘要
+    summary_target_chars: int = Field(default=140, ge=0, le=600)  # 摘要目标字数
 
 
 class DigestConfig(BaseModel):
@@ -219,6 +241,8 @@ class ChannelConfig(BaseModel):
     git_publish: bool = False  # True 时自动 git add/commit/push 站点目录
     git_branch: Optional[str] = None  # 为空则推送到当前分支
     masthead_en: str = "THE DAILY DISPATCH"
+    multi_page: bool = True     # 多版（头版 + 各版面分页）
+    show_summaries: bool = True  # 内页展示每条摘要
 
     @model_validator(mode="after")
     def require_fields_by_type(self) -> "ChannelConfig":

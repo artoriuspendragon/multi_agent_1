@@ -96,6 +96,8 @@ def publish_paper(
     git_publish: bool = False,
     git_branch: str | None = None,
     masthead_en: str = "THE DAILY DISPATCH",
+    multi_page: bool = True,
+    show_summaries: bool = True,
 ) -> PublishResult:
     """渲染并写入站点目录，更新 index/archive，按需 git 推送。"""
     out = Path(output_dir)
@@ -105,12 +107,18 @@ def publish_paper(
     date_str = _digest_date(digest)
 
     # dated 页面（archive 链接指向 ../archive.html，因为它在 papers/ 子目录下）
-    page_html = render_paper(digest, masthead_en=masthead_en, archive_href="../archive.html")
+    page_html = render_paper(
+        digest, masthead_en=masthead_en, archive_href="../archive.html",
+        multi_page=multi_page, show_summaries=show_summaries,
+    )
     page_path = papers / f"{date_str}.html"
     page_path.write_text(page_html, encoding="utf-8")
 
     # index.html = 最新一期（archive 链接为同级 archive.html）
-    index_html = render_paper(digest, masthead_en=masthead_en, archive_href="archive.html")
+    index_html = render_paper(
+        digest, masthead_en=masthead_en, archive_href="archive.html",
+        multi_page=multi_page, show_summaries=show_summaries,
+    )
     index_path = out / "index.html"
     index_path.write_text(index_html, encoding="utf-8")
 
