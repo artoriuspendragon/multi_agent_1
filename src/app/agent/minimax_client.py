@@ -38,24 +38,29 @@ def call_minimax_chat(
     user_name: str,
     user_content: str,
     timeout_seconds: int,
+    max_tokens: int | None = None,
 ) -> str:
     """
-    调用 MiniMax chatcompletion_v2，返回 choices[0].message.content 文本。
+    调用 OpenAI 兼容的 chat completions 接口（MiniMax chatcompletion_v2 / DeepSeek 等），
+    返回 choices[0].message.content 文本。
 
     system_name 作为 system message 的 content（系统指令）。
+    max_tokens：最大输出 token；推理类模型（如 DeepSeek v4）建议显式设置以免被默认值截断。
     """
     url = (endpoint or DEFAULT_MINIMAX_ENDPOINT).strip()
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}",
     }
-    payload = {
+    payload: dict[str, Any] = {
         "model": model,
         "messages": [
             {"role": "system", "content": system_name, "name": "系统"},
             {"role": "user", "content": user_content, "name": user_name},
         ],
     }
+    if max_tokens:
+        payload["max_tokens"] = max_tokens
 
     request_log = {
         "url": url,

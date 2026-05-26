@@ -184,6 +184,7 @@ def generate_with_agent(
         user_name="早报编辑",
         user_content=user_content,
         timeout_seconds=cfg.timeout_seconds,
+        max_tokens=cfg.max_output_tokens,
     )
     logger.debug("digest agent raw response: %s", text[:2000])
 

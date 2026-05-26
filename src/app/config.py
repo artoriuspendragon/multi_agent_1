@@ -166,8 +166,9 @@ class DigestAgentConfig(BaseModel):
     model: str
     constraints: str
     output_format: Literal["structured", "rendered"] = "structured"
-    timeout_seconds: int = Field(default=120, ge=1, le=600)
+    timeout_seconds: int = Field(default=120, ge=1, le=3600)
     max_input_items: int = Field(default=50, ge=1, le=300)
+    max_output_tokens: int = Field(default=8192, ge=256, le=65536)  # 模型最大输出 token（DeepSeek/OpenAI 兼容）
     include_summary: bool = False
     max_summary_chars: int = Field(default=200, ge=0, le=2000)
     prompt_template: Optional[str] = None
